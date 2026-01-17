@@ -37,7 +37,7 @@ const Register = ({ onToggle }) => {
         
         {/* Header */}
         <div className="mb-10">
-          <img src="./public/blog.png" alt="bloggify logo" srcset="" />
+          <img src='/blog.png' alt="bloggify logo" srcset="" />
           <h1 className="text-4xl font-bold text-black tracking-tight mb-3">
             Create Account
           </h1>
