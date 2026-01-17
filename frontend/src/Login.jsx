@@ -33,7 +33,7 @@ const Login = ({ onToggle }) => {
     <div className="min-h-screen min-w-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8">
       <div className="w-full max-w-md">           
           <div className="text-center mb-10">
-              <img src="./public/blog.png" alt="bloggify logo" srcset="" />
+              <img src="./blog.png" alt="bloggify logo" srcset="" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">Welcome back</h1>
             <p className="text-gray-500 mt-3 text-base leading-relaxed">Sign in to your account to continue</p>
           </div>
