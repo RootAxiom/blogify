@@ -190,7 +190,7 @@ export default function PrivacyPolicy() {
               <div className="bg-white p-6 rounded-lg border border-gray-200">
                 <p className="text-gray-700"><strong>Blogify Support Team</strong></p>
                 <p className="text-gray-700">Email: blogify-privacy@surajitsen.live </p>
-                <p className="text-gray-700">Website: www.blogify.com</p>
+                <p className="text-gray-700">Website: blogify.surajitsen.live</p>
               </div>
             </section>
 
