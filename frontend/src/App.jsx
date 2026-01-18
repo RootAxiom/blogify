@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
 import Login from './Login';
 import Register from './Register';
@@ -7,6 +7,7 @@ import BlogList from './BlogList';
 import BlogDetail from './BlogDetail';
 import CreateBlog from './CreateBlog';
 import AdminDashboard from './AdminDashboard';
+import LandingPage from './LandingPage';
 import './App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -141,14 +142,26 @@ const AuthPages = () => {
 };
 
 const AppContent = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
   return (
     <Routes>
+      <Route 
+        path="/" 
+        element={
+          user ? (
+            <Navigate to="/blogs" replace />
+          ) : (
+            <LandingPage onGetStarted={() => navigate('/login')} />
+          )
+        } 
+      />
       <Route path="/login" element={<PublicRoute><AuthPages /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><Register onToggle={() => window.location.href = '/login'} /></PublicRoute>} />
       <Route path="/blogs" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/blog/:id" element={<ProtectedRoute><BlogDetail /></ProtectedRoute>} />
-      <Route path="/" element={<Navigate to="/blogs" replace />} />
-      <Route path="*" element={<Navigate to="/blogs" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };
