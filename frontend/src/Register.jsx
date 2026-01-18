@@ -80,7 +80,7 @@ const Register = ({ onToggle }) => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <img src='/blog.png' alt="blogify logo" className="h-12 mx-auto mb-4" />
+          <img src='/blog.png' alt="blogify logo" className="h-30 mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Create Account
           </h1>
@@ -109,7 +109,7 @@ const Register = ({ onToggle }) => {
               required
               value={formData.name}
               onChange={handleChange}
-              placeholder="John Doe"
+              placeholder="Enter you cool name"
               className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none text-gray-900 placeholder:text-gray-400 hover:border-gray-400"
             />
           </div>
@@ -124,7 +124,7 @@ const Register = ({ onToggle }) => {
               required
               value={formData.email}
               onChange={handleChange}
-              placeholder="name@example.com"
+              placeholder="verified@email.com"
               className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none text-gray-900 placeholder:text-gray-400 hover:border-gray-400"
             />
           </div>
@@ -170,6 +170,14 @@ const Register = ({ onToggle }) => {
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
+        <div className="mt-4 text-center text-sm text-gray-700">
+  <p className="font-medium">
+    Due to a high number of spam accounts, registration currently requires email verification.
+  </p>
+  <p className="mt-1 font-normal text-gray-600">
+    We promise we’ll never share your email with anyone.
+  </p>
+</div>
 
         <div className="mt-8 text-center border-t border-gray-200 pt-6">
           <p className="text-sm text-gray-600">
