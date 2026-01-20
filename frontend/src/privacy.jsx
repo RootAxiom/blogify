@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
               onClick={() => navigate('/')}
               className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
             >
-              <img src="/blog.png" alt="BlogApp" className="h-10 w-14 object-contain" />
+              <img src="/blog.png" alt="blogify" className="h-10 w-14 object-contain" />
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Blogify
               </span>

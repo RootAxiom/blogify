@@ -66,9 +66,9 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <img src="/blog.png" alt="BlogApp" className="h-10 w-14 object-contain" />
+              <img src="/blog.png" alt="blogify" className="h-10 w-14 object-contain" />
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">BlogApp</h1>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">blogify</h1>
                 <p className="text-sm text-gray-500">Welcome, {user.name}</p>
               </div>
             </div>
