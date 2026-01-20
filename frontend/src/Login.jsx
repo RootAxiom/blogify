@@ -95,7 +95,7 @@ const Login = ({ onToggle }) => {
 
             <div className="mt-6 flex justify-center">
               <ReCAPTCHA 
-                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                sitekey="6LfebVAsAAAAAP4BNWw8kJ-eEfhs9ZWsGG4eYSHn"
                 onChange={setRecaptchaToken}
               />
             </div>
