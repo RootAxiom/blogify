@@ -26,6 +26,30 @@ api.interceptors.request.use((config) => {
 });
 
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 429) {
+      const message = error.response.data?.message || 'Too many requests. Please try again later.';
+      alert(message);
+    }
+    return Promise.reject(error);
+  }
+);
+
+
+publicApi.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 429) {
+      const message = error.response.data?.message || 'Too many requests. Please try again later.';
+      alert(message);
+    }
+    return Promise.reject(error);
+  }
+);
+
+
 export const authAPI = {
   register: (userData) => api.post('/auth/register', userData),
   login: (credentials) => api.post('/auth/login', credentials),
