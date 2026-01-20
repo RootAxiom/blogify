@@ -71,7 +71,7 @@ const VerifyOTP = ({ email, onVerified }) => {
             const value = e.target.value.replace(/\D/g, '');
             setOtp(value);
           }}
-          className="w-full px-4 py-4 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-center text-3xl font-bold letter-spacing-2 transition-all"
+          className="w-full px-4 py-4 border-2 border-gray-300 bg-white rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-center text-3xl font-bold text-gray-900 placeholder:text-gray-300 letter-spacing-2 transition-all outline-none"
           disabled={loading}
         />
         <p className="mt-3 text-sm text-gray-600 text-center">
