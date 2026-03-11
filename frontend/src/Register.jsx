@@ -5,12 +5,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 
 const Register = ({ onToggle }) => {
   const { register } = useAuth();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'user'
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'user' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
@@ -19,10 +14,7 @@ const Register = ({ onToggle }) => {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -47,35 +39,38 @@ const Register = ({ onToggle }) => {
   };
 
   const handleOTPVerified = () => {
-    // auto redirect to blogs page
     window.location.href = '/blogs';
   };
 
-  
   if (verificationSent) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8">
-        <div className="w-full max-w-md">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] px-4 py-8 relative overflow-hidden">
+        <div className="absolute top-1/4 -left-40 w-80 h-80 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="w-full max-w-md relative z-10">
           <div className="mb-8 text-center">
-            <img src="/blog.png" alt="Blogify logo" className="h-12 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Verify Your Email
-            </h1>
-            <p className="text-gray-600 text-sm">
-              We've sent a 6-digit code to your inbox
-            </p>
+            <pre className="text-[5px] leading-[5px] font-mono text-indigo-400 mx-auto mb-4 text-center select-none" aria-hidden="true">{`
+       +++++++
+       ++++++++
+       ++++++++
+        +++++++
+         ++++++
+        +++++++
+         ++++
+     +++++++++++
+      ++++++++++
+     ++++  +++= 
+      =++++++++
+        ++++++
+         ++++
+          ++
+          +
+`}</pre>
+            <h1 className="text-2xl font-bold text-white/95 mb-2">Verify Your Email</h1>
+            <p className="text-white/40 text-sm">We've sent a 6-digit code to your inbox</p>
           </div>
-
-          <VerifyOTP 
-            email={registeredEmail} 
-            onVerified={handleOTPVerified}
-          />
-
-          <div className="mt-8 text-center border-t border-gray-200 pt-6">
-            <button
-              onClick={onToggle}
-              className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
-            >
+          <VerifyOTP email={registeredEmail} onVerified={handleOTPVerified} />
+          <div className="mt-8 text-center border-t border-white/[0.06] pt-6">
+            <button onClick={onToggle} className="text-sm text-white/30 hover:text-white/60 transition-colors">
               Back to Login
             </button>
           </div>
@@ -85,76 +80,85 @@ const Register = ({ onToggle }) => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f] px-4 py-8 relative overflow-hidden">
+      <div className="absolute top-1/4 -left-40 w-80 h-80 bg-violet-500/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 -right-40 w-80 h-80 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="w-full max-w-md relative z-10">
         <div className="mb-8 text-center">
-          <img src='/blog.png' alt="blogify logo" className="h-30 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Create Account
-          </h1>
-          <p className="text-gray-600 text-sm">
-            Sign up to start sharing your stories
-          </p>
+          <pre className="text-[5px] leading-[5px] font-mono text-indigo-400 mx-auto mb-5 text-center select-none" aria-hidden="true">{`
+       +++++++
+       ++++++++
+       ++++++++
+        +++++++
+         ++++++
+        +++++++
+         ++++
+     +++++++++++
+      ++++++++++
+     ++++  +++= 
+      =++++++++
+        ++++++
+         ++++
+          ++
+          +
+`}</pre>
+          <h1 className="text-3xl font-bold text-white/95 mb-2">Create Account</h1>
+          <p className="text-white/40 text-sm">Sign up to start sharing your stories</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-            <svg className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
             </svg>
-            <span className="text-red-700 text-sm font-medium">{error}</span>
+            <span className="text-red-300 text-sm font-medium">{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="group">
-            <label className="block text-sm font-semibold text-gray-800 mb-2 group-focus-within:text-black transition-colors">
-              Full Name
-            </label>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-white/60 mb-2">Full Name</label>
             <input
               type="text"
               name="name"
               required
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter you cool name"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none text-gray-900 placeholder:text-gray-400 hover:border-gray-400"
+              placeholder="Your name"
+              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-white/[0.04] focus:bg-white/[0.06] focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 transition-all outline-none text-white placeholder:text-white/20"
             />
           </div>
 
-          <div className="group">
-            <label className="block text-sm font-semibold text-gray-800 mb-2 group-focus-within:text-black transition-colors">
-              Email Address
-            </label>
+          <div>
+            <label className="block text-sm font-medium text-white/60 mb-2">Email Address</label>
             <input
               type="email"
               name="email"
               required
               value={formData.email}
               onChange={handleChange}
-              placeholder="verified@email.com"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none text-gray-900 placeholder:text-gray-400 hover:border-gray-400"
+              placeholder="you@email.com"
+              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-white/[0.04] focus:bg-white/[0.06] focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 transition-all outline-none text-white placeholder:text-white/20"
             />
           </div>
 
-          <div className="group">
-            <label className="block text-sm font-semibold text-gray-800 mb-2 group-focus-within:text-black transition-colors">
-              Password
-            </label>
+          <div>
+            <label className="block text-sm font-medium text-white/60 mb-2">Password</label>
             <div className="relative">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 required
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="At least 6 characters"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all outline-none text-gray-900 placeholder:text-gray-400 hover:border-gray-400 pr-10"
+                className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-white/[0.04] focus:bg-white/[0.06] focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 transition-all outline-none text-white placeholder:text-white/20 pr-10"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
               >
                 {showPassword ? (
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,46 +174,38 @@ const Register = ({ onToggle }) => {
             </div>
           </div>
 
-          <div className="mt-6 flex justify-center">
-            <ReCAPTCHA 
+          <div className="flex justify-center pt-2">
+            <ReCAPTCHA
               sitekey="6LfebVAsAAAAAP4BNWw8kJ-eEfhs9ZWsGG4eYSHn"
               onChange={setRecaptchaToken}
+              theme="dark"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-8 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+            className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_32px_-4px_rgba(99,102,241,0.5)]"
           >
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
-        <div className="mt-4 text-center text-sm text-gray-700">
-  <p className="font-medium">
-    Due to a high number of spam accounts, registration currently requires email verification.
-  </p>
-  <p className="mt-1 font-normal text-gray-600">
-    We promise we’ll never share your email with anyone.
-  </p>
-</div>
 
-        <div className="mt-8 text-center border-t border-gray-200 pt-6">
-          <p className="text-sm text-gray-600">
+        <p className="mt-4 text-center text-xs text-white/25 leading-relaxed">
+          Registration requires email verification. We'll never share your email.
+        </p>
+        <p>Please keep on this page until verification is complete.</p>
+
+        <div className="mt-6 text-center border-t border-white/[0.06] pt-6">
+          <p className="text-sm text-white/30">
             Already have an account?{' '}
-            <button
-              onClick={onToggle}
-              className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-            >
+            <button onClick={onToggle} className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">
               Sign in
             </button>
           </p>
-          
         </div>
       </div>
-      
     </div>
-    
   );
 };
 
