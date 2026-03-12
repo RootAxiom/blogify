@@ -58,4 +58,53 @@ const sendPasswordResetEmail = async ({ toEmail, otp }) => {
   return client.sendTransacEmail(email);
 };
 
-module.exports = { sendVerificationEmail, sendPasswordResetEmail };
+const sendSuccessResetEmail = async ({ toEmail }) => {
+  if (!toEmail) {
+    throw new Error('Email is required');
+  }
+
+  const email = new SendSmtpEmail();
+  email.subject = 'Password Reset Successful - Blogify';
+  email.htmlContent = `
+    <html><body>
+      <h2>Password Reset Successful</h2>
+      <p>Your password has been reset successfully.</p>
+      <p>If you did not reset your password, please contact our support team immediately.</p>
+      <p>Thank you,<br/>Blogify Team</p>
+      <p>For any issues, contact <a href="mailto:blogify-support@surajitsen.live">blogify-support@surajitsen.live</a></p>
+    </body></html>
+  `;
+  email.sender = { email: process.env.EMAIL_FROM, name: 'Blogify Password Reset' };
+  email.to = [{ email: toEmail }];
+
+  return client.sendTransacEmail(email);
+};
+
+const sendWelcomeEmail = async ({ toEmail, name }) => {
+  if (!toEmail) {
+    throw new Error('Email is required');
+  }
+
+  const email = new SendSmtpEmail();
+  email.subject = 'Welcome to Blogify!';
+  email.htmlContent = `
+    <html><body>
+      <h2 style="color: #6366f1;">Welcome to Blogify, ${name || 'there'}!</h2>
+      <p>Your email has been verified and your account is now active.</p>
+      <p>You can now:</p>
+      <ul>
+        <li>Create and publish your own blog posts</li>
+        <li>Read and explore blogs from the community</li>
+      </ul>
+      <p>We're excited to have you on board!</p>
+      <p>Thank you,<br/>Blogify Team</p>
+      <p>For any issues, contact <a href="mailto:blogify-support@surajitsen.live">blogify-support@surajitsen.live</a></p>
+    </body></html>
+  `;
+  email.sender = { email: process.env.EMAIL_FROM, name: 'Blogify' };
+  email.to = [{ email: toEmail }];
+
+  return client.sendTransacEmail(email);
+};
+
+module.exports = { sendVerificationEmail, sendPasswordResetEmail, sendSuccessResetEmail, sendWelcomeEmail };

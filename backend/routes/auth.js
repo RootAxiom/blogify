@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 const { auth } = require('../middleware/auth');
-const { sendVerificationEmail, sendPasswordResetEmail } = require('../utils/email');
+const { sendVerificationEmail, sendPasswordResetEmail, sendSuccessResetEmail, sendWelcomeEmail } = require('../utils/email');
 require('dotenv').config();
 const rateLimit = require('express-rate-limit');
 const router = express.Router();
@@ -183,6 +183,11 @@ router.post('/verify-otp', async (req, res) => {
         await user.save();
         console.log('User verified successfully:', user.email);
 
+        // Send welcome email (fire and forget)
+        sendWelcomeEmail({ toEmail: user.email, name: user.name }).catch(err =>
+            console.error('Failed to send welcome email:', err)
+        );
+
         // GENERATE TOKEN AFTER VERIFICATION
         const token = jwt.sign(
             { userId: user._id },
@@ -270,6 +275,11 @@ router.post('/reset-password', passwordResetLimiter, [
         user.resetPasswordOtp = undefined;
         user.resetPasswordOtpExpiry = undefined;
         await user.save();
+
+        // Send password reset success email (fire and forget)
+        sendSuccessResetEmail({ toEmail: user.email }).catch(err =>
+            console.error('Failed to send password reset success email:', err)
+        );
 
         res.json({ message: 'Password reset successful. You can now log in with your new password.' });
     } catch (error) {
