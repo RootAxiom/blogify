@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { adminAPI, blogAPI } from './api';
-import { useAuth } from './AuthContext';
+import { adminAPI, blogAPI } from '../api';
+import { useAuth } from '../Auth/AuthContext';
 import {
   LayoutDashboard,
   Users,
@@ -12,8 +12,6 @@ import {
   Search,
   Menu,
   X,
-  MoreVertical,
-  Edit
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 

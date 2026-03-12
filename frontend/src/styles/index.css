@@ -26,3 +26,9 @@ body {
     background-color: #f8f9fa;
   }
 }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}

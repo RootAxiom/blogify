@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { authAPI } from './api';
+import { authAPI } from '../api';
 
 const VerifyEmail = ({ token }) => {
   const [loading, setLoading] = useState(true);

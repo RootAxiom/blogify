@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { blogAPI } from './api';
-import { useAuth } from './AuthContext';
+import { blogAPI } from '../api';
+import { useAuth } from '../Auth/AuthContext';
 import { ArrowLeft, User, Calendar, Trash2, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 

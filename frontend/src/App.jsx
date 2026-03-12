@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './AuthContext';
-import Login from './Login';
-import Register from './Register';
-import ForgotPassword from './ForgotPassword';
-import BlogList from './BlogList';
-import BlogDetail from './BlogDetail';
-import CreateBlog from './CreateBlog';
-import AdminDashboard from './AdminDashboard';
-import LandingPage from './LandingPage';
-import PrivacyPolicy from './privacy';
-import Learnmore from './Learnmore';
-import Contact from './Contact';
-import './App.css';
+import { AuthProvider, useAuth } from './Auth/AuthContext';
+import Login from './Auth/Login';
+import Register from './Auth/Register';
+import ForgotPassword from './Auth/ForgotPassword';
+import BlogList from './components/BlogList';
+import BlogDetail from './components/BlogDetail';
+import CreateBlog from './components/CreateBlog';
+import AdminDashboard from './components/AdminDashboard';
+import LandingPage from './components/LandingPage';
+import PrivacyPolicy from './components/privacy';
+import Learnmore from './components/Learnmore';
+import Contact from './components/Contact';
+import './styles/App.css';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();

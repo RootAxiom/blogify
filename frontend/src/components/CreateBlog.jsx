@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { blogAPI, uploadAPI } from './api';
+import { blogAPI, uploadAPI } from '../api';
 import { Type, Hash, Send, CheckCircle, Upload, X } from 'lucide-react';
 import EasyMDE from 'easymde';
 import 'easymde/dist/easymde.min.css';

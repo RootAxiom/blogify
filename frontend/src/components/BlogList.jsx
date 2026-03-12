@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { blogAPI } from './api';
-import { useAuth } from './AuthContext';
+import { blogAPI } from '../api';
+import { useAuth } from '../Auth/AuthContext';
 import { Plus, Trash2, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 

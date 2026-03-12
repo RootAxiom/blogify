@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { authAPI } from './api';
+import { authAPI } from '../api';
 
 const ForgotPassword = ({ onBackToLogin }) => {
   const [step, setStep] = useState('email');

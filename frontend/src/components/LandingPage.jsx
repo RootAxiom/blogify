@@ -389,16 +389,16 @@ const LandingPage = ({ onGetStarted }) => {
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 flex justify-between items-center h-16">
           <div className="flex items-center gap-3">
             <pre className="text-[4px] leading-[4px] font-mono text-indigo-400 select-none" aria-hidden="true">{`
-    +++++++
+    ++++++++
     ++++++++
     ++++++++
      +++++++
       ++++++
      +++++++
-      ++++
+      +++++
   +++++++++++
-   ++++++++++
-  ++++  +++= 
+    +++++++++
+  ++++  ++++ 
    =++++++++
      ++++++
       ++++
@@ -442,7 +442,7 @@ const LandingPage = ({ onGetStarted }) => {
       </nav>
 
       {/* ─── Hero ─── */}
-      <section className="relative min-h-screen flex items-center justify-center pt-16">
+     <section className="relative min-h-screen flex items-center justify-center pt-10">
         {/* Three.js background */}
         <div className="absolute inset-0 z-0">
           <Canvas camera={{ position: [0, 0, 6], fov: 55 }} dpr={[1, 1.5]}>
@@ -451,13 +451,19 @@ const LandingPage = ({ onGetStarted }) => {
             </Suspense>
           </Canvas>
         </div>
+        
         {/* Gradient overlays */}
         <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0a0a0f]/40 via-transparent to-[#0a0a0f]" />
         <div className="absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_0%,#0a0a0f_75%)]" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 text-center">
-          <div ref={heroHeadingRef}>
-            <pre className="text-[8px] leading-[8px] sm:text-[10px] sm:leading-[10px] font-mono text-indigo-400 mx-auto mb-6 select-none inline-block" aria-hidden="true">{`
+        {/* --- CHANGED: Added flex flex-col items-center here --- */}
+        <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 flex flex-col items-center text-center w-full">
+          
+          {/* --- CHANGED: Added flex-col items-center to the heading wrapper --- */}
+          <div ref={heroHeadingRef} className="flex flex-col items-center w-full">
+            
+            {/* --- CHANGED: Changed inline-block to block so it stacks vertically --- */}
+            <pre className="block text-[8px] leading-[8px] sm:text-[10px] sm:leading-[10px] font-mono text-indigo-400 mb-6 select-none" aria-hidden="true">{`
     +++++++
     ++++++++
     ++++++++
@@ -484,28 +490,25 @@ const LandingPage = ({ onGetStarted }) => {
               </span>
             </h1>
           </div>
+          
           <p
             ref={heroSubRef}
             className="mt-6 text-lg sm:text-xl text-white/50 max-w-2xl mx-auto leading-relaxed font-light"
           >
             Write, publish, and grow your audience on a platform crafted for people who care about the craft of writing. No distractions — just your voice.
           </p>
-          <div ref={heroBtnsRef} className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
+
+          {/* --- CHANGED: Ensured w-full and flex justify-center on the button wrapper --- */}
+          <div ref={heroBtnsRef} className="mt-10 flex w-full justify-center items-center">
             <button
               onClick={onGetStarted}
-              onMouseMove={handleMagnetic}
-              onMouseLeave={handleMagneticLeave}
-              className="group relative px-8 py-3.5 text-base font-semibold rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-[0_0_32px_-4px_rgba(99,102,241,0.5)] hover:shadow-[0_0_48px_-4px_rgba(99,102,241,0.7)] transition-shadow"
+              className="group relative px-6 py-3.5 text-base font-semibold rounded-3xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-[0_0_32px_-4px_rgba(99,102,241,0.5)] hover:shadow-[0_0_48px_-4px_rgba(99,102,241,0.7)] transition-shadow text-center"
             >
               Start Writing — It's Free
-              <span className="absolute inset-0 rounded-xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="absolute inset-0 rounded-3xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             </button>
-            <button
-              onClick={() => navigate('/privacy')}
-              className="px-8 py-3.5 text-base font-medium rounded-xl border border-white/10 text-white/70 hover:text-white hover:border-white/25 transition-all"
-            >
-              Learn More
-            </button>
+            
+            {/* If you are keeping the 'Learn More' button, put it back here. If not, remove this comment! */}
           </div>
         </div>
       </section>
