@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import api from './api';
 
 export default function Contact() {
   const navigate = useNavigate();
@@ -18,11 +19,12 @@ export default function Contact() {
     setLoading(true);
     setError('');
     try {
+      await api.post('/contact', formData);
       setSubmitted(true);
       setFormData({ name: '', email: '', subject: '', message: '' });
       setTimeout(() => setSubmitted(false), 5000);
-    } catch {
-      setError('Failed to send message. Please try again.');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to send message. Please try again.');
     } finally {
       setLoading(false);
     }
