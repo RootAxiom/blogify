@@ -63,6 +63,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/blogs', require('./routes/blogs'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/upload', require('./routes/upload'));
+app.use('/api/contact', require('./routes/contact'));
 
 app.get('/', (req, res) => {
     res.json({ message: 'Blog App Backend API' });
