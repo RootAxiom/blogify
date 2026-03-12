@@ -493,7 +493,7 @@ const LandingPage = ({ onGetStarted }) => {
           
           <p
             ref={heroSubRef}
-            className="mt-6 text-lg sm:text-xl text-white/50 max-w-2xl mx-auto leading-relaxed font-light"
+            className="mt-6 text-lg sm:text-2xl text-white/50 max-w-2xl mx-auto leading-relaxed font-light"
           >
             Write, publish, and grow your audience on a platform crafted for people who care about the craft of writing. No distractions — just your voice.
           </p>
@@ -502,7 +502,7 @@ const LandingPage = ({ onGetStarted }) => {
           <div ref={heroBtnsRef} className="mt-10 flex w-full justify-center items-center">
             <button
               onClick={onGetStarted}
-              className="group relative px-6 py-3.5 text-base font-semibold rounded-3xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-[0_0_32px_-4px_rgba(99,102,241,0.5)] hover:shadow-[0_0_48px_-4px_rgba(99,102,241,0.7)] transition-shadow text-center"
+              className="group relative px-6 py-3.5 text-base font-semibold rounded-3xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-[0_0_32px_-4px_rgba(99,102,241,0.5)] hover:shadow-[0_0_49px_-4px_rgba(99,102,241,0.7)] transition-shadow text-center"
             >
               Start Writing — It's Free
               <span className="absolute inset-0 rounded-3xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
