@@ -1,0 +1,33 @@
+name: Node Security Scan
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - "backend/**"
+  pull_request:
+    branches: [ master ]
+    paths:
+      - "backend/**"
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  njsscan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run njsscan on backend
+        uses: ajinabraham/njsscan-action@master
+        with:
+          args: "backend --sarif --output njsscan-results.sarif"
+
+      - name: Upload results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: njsscan-results.sarif
