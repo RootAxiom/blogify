@@ -10,11 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
+    "@marsidev/react-turnstile": "^1.4.2",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@sentry/react": "^10.36.0",
     "axios": "^1.13.2",
     "badge-maker": "^5.0.2",
+    "dotenv": "^17.3.1",
     "easymde": "^2.20.0",
     "gsap": "^3.14.2",
     "lucide-react": "^0.562.0",
@@ -23,6 +27,8 @@
     "react-google-recaptcha": "^3.1.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.12.0",
+    "react-turnstile": "^1.1.5",
+    "remark-gfm": "^4.0.1",
     "sweetalert2": "^11.26.17",
     "three": "^0.183.2"
   },

@@ -4,6 +4,9 @@ import { blogAPI } from '../api';
 import { useAuth } from '../Auth/AuthContext';
 import { ArrowLeft, User, Calendar, Trash2, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import UserProfilePopup from './UserProfilePopup';
+import verifiedBadge from '../assets/verified.png';
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -13,6 +16,7 @@ const BlogDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const [showAuthorPopup, setShowAuthorPopup] = useState(false);
 
   useEffect(() => { fetchBlog(); }, [id]);
 
@@ -71,6 +75,7 @@ const BlogDetail = () => {
   }
 
   const isAuthor = user && (blog.author?._id === user.id || user.role === 'admin');
+  const displayUsername = blog.author?.username || String(blog.author?.name || 'anonymous').toLowerCase().replace(/\s+/g, '_');
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
@@ -100,15 +105,33 @@ const BlogDetail = () => {
             </h1>
 
             <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 mb-8 pb-8 border-b border-white/[0.06]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/[0.06] flex items-center justify-center">
-                  <User size={18} className="text-white/40" />
+              <button
+                type="button"
+                onClick={() => setShowAuthorPopup(true)}
+                className="flex items-center gap-3 rounded-xl px-2 py-1 hover:bg-white/[0.04] transition-all"
+              >
+                <div className="w-10 h-10 rounded-full bg-white/[0.06] flex items-center justify-center overflow-hidden">
+                  {blog.author?.profilePicture ? (
+                    <img src={blog.author.profilePicture} alt={blog.author?.name || 'Author'} className="w-full h-full object-cover" />
+                  ) : (
+                    <User size={18} className="text-white/40" />
+                  )}
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-white/80">{blog.author?.name || 'Anonymous'}</p>
-                  <p className="text-xs text-white/30">{blog.author?.email}</p>
+                <div className="text-left">
+                  <p className="text-sm font-semibold text-white/80 flex items-center gap-1.5">
+                    @{displayUsername}
+                    {blog.author?.role === 'admin' && (
+                      <img
+                        src={verifiedBadge}
+                        alt="Admin verified"
+                        title="blogifyadmin - this account is affiliated with blogify"
+                        className="w-4 h-4 object-contain"
+                      />
+                    )}
+                  </p>
+                  <p className="text-xs text-white/30">{blog.author?.name || 'Anonymous'}</p>
                 </div>
-              </div>
+              </button>
 
               <div className="flex items-center gap-2 text-white/30">
                 <Calendar size={18} />
@@ -149,6 +172,7 @@ const BlogDetail = () => {
           <div className="prose prose-lg prose-invert max-w-none mb-16">
             <div className="text-white/70 leading-relaxed space-y-4">
               <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
                 components={{
                   h1: ({ node, ...props }) => <h1 className="text-4xl font-bold text-white/90 mt-8 mb-4" {...props} />,
                   h2: ({ node, ...props }) => <h2 className="text-3xl font-bold text-white/90 mt-8 mb-4" {...props} />,
@@ -190,6 +214,10 @@ const BlogDetail = () => {
           </div>
         </article>
       </div>
+
+      {showAuthorPopup && (
+        <UserProfilePopup author={blog.author} onClose={() => setShowAuthorPopup(false)} />
+      )}
     </div>
   );
 };

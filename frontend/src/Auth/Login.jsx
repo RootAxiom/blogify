@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ onToggle, onForgotPassword }) => {
   const { login } = useAuth();
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ identifier: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
@@ -25,7 +27,11 @@ const Login = ({ onToggle, onForgotPassword }) => {
     }
 
     const result = await login(formData);
-    if (!result.success) setError(result.message);
+    if (!result.success) {
+      setError(result.message);
+    } else {
+      navigate('/profile');
+    }
     setLoading(false);
   };
 
@@ -68,17 +74,17 @@ const Login = ({ onToggle, onForgotPassword }) => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-white/60 mb-2">
-              Email Address
+            <label htmlFor="identifier" className="block text-sm font-medium text-white/60 mb-2">
+              Email or Username
             </label>
             <input
-              id="email"
-              name="email"
-              type="email"
+              id="identifier"
+              name="identifier"
+              type="text"
               required
-              value={formData.email}
+              value={formData.identifier}
               onChange={handleChange}
-              placeholder="you@email.com"
+              placeholder="you@email.com or username"
               className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-white/[0.04] focus:bg-white/[0.06] focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 transition-all outline-none text-white placeholder:text-white/20"
             />
           </div>

@@ -12,6 +12,7 @@ import LandingPage from './components/LandingPage';
 import PrivacyPolicy from './components/privacy';
 import Learnmore from './components/Learnmore';
 import Contact from './components/Contact';
+import Profile from './components/Profile';
 import './styles/App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -36,12 +37,13 @@ const PublicRoute = ({ children }) => {
       </div>
     );
   }
-  if (user) return <Navigate to="/blogs" replace />;
+  if (user) return <Navigate to="/profile" replace />;
   return children;
 };
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [showCreateBlog, setShowCreateBlog] = useState(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
   const [refreshBlogs, setRefreshBlogs] = useState(0);
@@ -52,9 +54,9 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <img src="/blog.png" alt="blogify" className="h-10 w-14 object-contain" />
+              <img src="/oldlogo.png" alt="Blogify" className="h-10 w-auto object-contain drop-shadow-md" />
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">blogify</h1>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Blogify</h1>
                 <p className="text-sm text-white/40">Welcome, {user.name}</p>
               </div>
             </div>
@@ -69,6 +71,13 @@ const Dashboard = () => {
                 className="bg-gradient-to-r from-indigo-500 to-violet-600 hover:shadow-[0_0_24px_-4px_rgba(99,102,241,0.5)] text-white px-4 py-2 rounded-xl font-medium transition-all"
               >
                 {showCreateBlog ? 'View Blogs' : 'Create Blog'}
+              </button>
+
+              <button
+                onClick={() => navigate('/profile')}
+                className="bg-white/[0.06] border border-white/[0.08] text-white/70 hover:text-white hover:bg-white/[0.1] px-4 py-2 rounded-xl font-medium transition-all"
+              >
+                Profile
               </button>
 
               {user.role === 'admin' && (
@@ -135,7 +144,7 @@ const AppContent = () => {
         path="/" 
         element={
           user ? (
-            <Navigate to="/blogs" replace />
+            <Navigate to="/profile" replace />
           ) : (
             <LandingPage onGetStarted={() => navigate('/login')} />
           )
@@ -143,11 +152,12 @@ const AppContent = () => {
       />
       <Route path="/login" element={<PublicRoute><AuthPages /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><Register onToggle={() => window.location.href = '/login'} /></PublicRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/blogs" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/blog/:id" element={<ProtectedRoute><BlogDetail /></ProtectedRoute>} />
-        <Route path="/learnmore" element={<Learnmore />} />
+      <Route path="/learnmore" element={<Learnmore />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

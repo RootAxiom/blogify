@@ -66,9 +66,21 @@ export const authAPI = {
   resetPassword: (data) => publicApi.post('/auth/reset-password', data),
 };
 
+export const profileAPI = {
+  getProfile: () => api.get('/profile/me'),
+  updateProfile: (profileData) => api.put('/profile/me', profileData),
+};
+
 
 export const blogAPI = {
-  getAllBlogs: (page = 1) => api.get(`/blogs?page=${page}`),
+  getAllBlogs: ({ page = 1, tag = '', search = '', username = '' } = {}) => {
+    const params = new URLSearchParams();
+    params.set('page', String(page));
+    if (tag) params.set('tag', tag);
+    if (search) params.set('search', search);
+    if (username) params.set('username', username);
+    return api.get(`/blogs?${params.toString()}`);
+  },
   getBlog: (id) => api.get(`/blogs/${id}`),
   createBlog: (blogData) => api.post('/blogs', blogData),
   updateBlog: (id, blogData) => api.put(`/blogs/${id}`, blogData),

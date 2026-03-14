@@ -5,7 +5,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 
 const Register = ({ onToggle }) => {
   const { register } = useAuth();
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'user' });
+  const [formData, setFormData] = useState({ name: '', username: '', email: '', password: '', role: 'user' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
@@ -39,7 +39,7 @@ const Register = ({ onToggle }) => {
   };
 
   const handleOTPVerified = () => {
-    window.location.href = '/blogs';
+    window.location.href = '/profile';
   };
 
   if (verificationSent) {
@@ -141,6 +141,23 @@ const Register = ({ onToggle }) => {
               placeholder="you@email.com"
               className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-white/[0.04] focus:bg-white/[0.06] focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 transition-all outline-none text-white placeholder:text-white/20"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-white/60 mb-2">Username</label>
+            <input
+              type="text"
+              name="username"
+              required
+              minLength={3}
+              maxLength={20}
+              pattern="[A-Za-z0-9_.]{3,20}"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="your_username"
+              className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-white/[0.04] focus:bg-white/[0.06] focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 transition-all outline-none text-white placeholder:text-white/20"
+            />
+            <p className="text-xs text-white/35 mt-1">3-20 chars, letters, numbers, underscore, dot.</p>
           </div>
 
           <div>

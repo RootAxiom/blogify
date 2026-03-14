@@ -25,8 +25,30 @@ const passwordResetLimiter = rateLimit({
     legacyHeaders: false,
 });
 
+const serializeUser = (user) => ({
+    id: user._id,
+    name: user.name,
+    username: user.username || '',
+    email: user.email,
+    role: user.role,
+    isVerified: user.isVerified,
+    bio: user.bio || '',
+    profilePicture: user.profilePicture || '',
+    socialHandles: {
+        twitter: user.socialHandles?.twitter || '',
+        github: user.socialHandles?.github || '',
+        linkedin: user.socialHandles?.linkedin || '',
+        website: user.socialHandles?.website || '',
+        instagram: user.socialHandles?.instagram || ''
+    }
+});
+
 router.post('/register', [
     body('name').notEmpty().withMessage('Name is required'),
+    body('username')
+        .trim()
+        .matches(/^[a-zA-Z0-9_.]{3,20}$/)
+        .withMessage('Username must be 3-20 characters and only letters, numbers, underscore, dot'),
     body('email').isEmail().withMessage('Valid email is required'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ], async (req, res) => {
@@ -36,17 +58,24 @@ router.post('/register', [
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { name, email, password, role } = req.body;
+        const { name, username, email, password, role } = req.body;
+        const normalizedUsername = username.trim().toLowerCase();
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
+        const existingUsername = await User.findOne({ username: normalizedUsername });
+        if (existingUsername) {
+            return res.status(400).json({ message: 'Username is already taken' });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = new User({
             name,
+            username: normalizedUsername,
             email,
             password: hashedPassword,
             role: role || 'user'
@@ -67,7 +96,7 @@ router.post('/register', [
 });
 
 router.post('/login', [
-    body('email').isEmail().withMessage('Valid email is required'),
+    body('identifier').notEmpty().withMessage('Email or username is required'),
     body('password').notEmpty().withMessage('Password is required')
 ], async (req, res) => {
     try {
@@ -76,9 +105,15 @@ router.post('/login', [
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { email, password } = req.body;
+        const { identifier, password } = req.body;
+        const normalizedIdentifier = identifier.trim().toLowerCase();
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({
+            $or: [
+                { email: normalizedIdentifier },
+                { username: normalizedIdentifier }
+            ]
+        });
         if (!user) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
@@ -103,13 +138,7 @@ router.post('/login', [
         res.json({
             message: 'Login successful',
             token,
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-                isVerified: user.isVerified
-            }
+            user: serializeUser(user)
         });
     } catch (error) {
         console.error(error);
@@ -120,13 +149,7 @@ router.post('/login', [
 router.get('/me', auth, async (req, res) => {
     try {
         res.json({
-            user: {
-                id: req.user._id,
-                name: req.user.name,
-                email: req.user.email,
-                role: req.user.role,
-                isVerified: req.user.isVerified
-            }
+            user: serializeUser(req.user)
         });
     } catch (error) {
         console.error(error);
@@ -209,13 +232,7 @@ router.post('/verify-otp', async (req, res) => {
         res.json({ 
             message: 'Email verified successfully',
             token,
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-                isVerified: user.isVerified
-            }
+            user: serializeUser(user)
         });
     } catch (error) {
         console.error('OTP verification error:', error);

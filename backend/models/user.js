@@ -6,6 +6,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true
+    },
     email: {
         type: String,
         required: true,
@@ -19,6 +26,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['user', 'admin'],
         default: 'user'
+    },
+    bio: {
+        type: String,
+        trim: true,
+        maxlength: 300,
+        default: 'Hi there! I am using Blogify.'
+    },
+    profilePicture: {
+        type: String,
+        default: ''
+    },
+    socialHandles: {
+        twitter: { type: String, trim: true, default: '' },
+        github: { type: String, trim: true, default: '' },
+        linkedin: { type: String, trim: true, default: '' },
+        website: { type: String, trim: true, default: '' },
+        instagram: { type: String, trim: true, default: '' }
     },
     isVerified: { type: Boolean, default: false },
     otp: { type: String },

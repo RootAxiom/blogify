@@ -24,6 +24,7 @@
 
 .blog-editor-dark .EasyMDEContainer .CodeMirror-scroll {
   background-color: transparent;
+  min-height: 420px;
 }
 
 .blog-editor-dark .EasyMDEContainer .CodeMirror-cursor {
@@ -55,6 +56,15 @@
 .blog-editor-dark .EasyMDEContainer .editor-preview {
   background-color: #111118;
   color: rgba(255,255,255,0.7);
+  min-height: 420px;
+  padding: 20px;
+}
+
+.blog-editor-dark .EasyMDEContainer .editor-preview-side {
+  min-height: 420px;
+  background-color: #111118;
+  color: rgba(255,255,255,0.7);
+  padding: 20px;
 }
 
 .blog-editor-dark .EasyMDEContainer .editor-preview p,

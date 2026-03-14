@@ -3,6 +3,8 @@ import { blogAPI } from '../api';
 import { useAuth } from '../Auth/AuthContext';
 import { Plus, Trash2, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import UserProfilePopup from './UserProfilePopup';
+import verifiedBadge from '../assets/verified.png';
 
 const BlogList = () => {
   const { user } = useAuth();
@@ -10,12 +12,20 @@ const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [filters, setFilters] = useState({ search: '', tag: '' });
+  const [draftFilters, setDraftFilters] = useState({ search: '', tag: '' });
+  const [selectedAuthor, setSelectedAuthor] = useState(null);
 
-  useEffect(() => { fetchBlogs(); }, []);
+  useEffect(() => { fetchBlogs(); }, [filters]);
 
   const fetchBlogs = async () => {
     try {
-      const response = await blogAPI.getAllBlogs();
+      setError('');
+      const response = await blogAPI.getAllBlogs({
+        page: 1,
+        search: filters.search,
+        tag: filters.tag
+      });
       const blogData = response.data.blogs || response.data;
       setBlogs(Array.isArray(blogData) ? blogData : []);
     } catch {
@@ -34,6 +44,26 @@ const BlogList = () => {
         alert('Could not delete the blog post.');
       }
     }
+  };
+
+  const applyFilters = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setFilters({
+      search: draftFilters.search.trim(),
+      tag: draftFilters.tag.trim()
+    });
+  };
+
+  const clearFilters = () => {
+    setLoading(true);
+    setDraftFilters({ search: '', tag: '' });
+    setFilters({ search: '', tag: '' });
+  };
+
+  const displayUsername = (author) => {
+    if (author?.username) return author.username;
+    return String(author?.name || 'anonymous').toLowerCase().replace(/\s+/g, '_');
   };
 
   const SkeletonCard = () => (
@@ -79,6 +109,36 @@ const BlogList = () => {
             </h1>
             <div className="h-1 w-16 bg-gradient-to-r from-indigo-500 to-violet-600 mt-4 rounded-full" />
           </div>
+
+          <form onSubmit={applyFilters} className="w-full md:w-auto flex flex-col sm:flex-row gap-3">
+            <input
+              type="text"
+              value={draftFilters.search}
+              onChange={(e) => setDraftFilters((prev) => ({ ...prev, search: e.target.value }))}
+              placeholder="Search title/content"
+              className="px-4 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.04] text-white placeholder:text-white/30 focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 outline-none"
+            />
+            <input
+              type="text"
+              value={draftFilters.tag}
+              onChange={(e) => setDraftFilters((prev) => ({ ...prev, tag: e.target.value }))}
+              placeholder="Filter by tag"
+              className="px-4 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.04] text-white placeholder:text-white/30 focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 outline-none"
+            />
+            <button
+              type="submit"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 text-white font-semibold"
+            >
+              Search
+            </button>
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="px-4 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white/70 hover:text-white"
+            >
+              Clear
+            </button>
+          </form>
         </div>
 
         {error && (
@@ -117,12 +177,33 @@ const BlogList = () => {
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center">
-                        <User size={10} className="text-white/30" />
-                      </div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-white/30">
-                        {blog.author?.name || 'Anonymous'}
-                      </span>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedAuthor(blog.author || null);
+                        }}
+                        className="flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-white/[0.05] transition-all"
+                      >
+                        <div className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center overflow-hidden">
+                          {blog.author?.profilePicture ? (
+                            <img src={blog.author.profilePicture} alt={blog.author.name || 'Author'} className="w-full h-full object-cover" />
+                          ) : (
+                            <User size={10} className="text-white/30" />
+                          )}
+                        </div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-white/30 flex items-center gap-1">
+                          @{displayUsername(blog.author)}
+                          {blog.author?.role === 'admin' && (
+                            <img
+                              src={verifiedBadge}
+                              alt="Admin verified"
+                              title="blogifyadmin - this account is affiliated with blogify"
+                              className="w-3.5 h-3.5 object-contain"
+                            />
+                          )}
+                        </span>
+                      </button>
                     </div>
                     <span className="text-[10px] font-medium text-white/20">
                       {blog.createdAt ? new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Draft'}
@@ -166,6 +247,10 @@ const BlogList = () => {
           </div>
         )}
       </div>
+
+      {selectedAuthor && (
+        <UserProfilePopup author={selectedAuthor} onClose={() => setSelectedAuthor(null)} />
+      )}
     </div>
   );
 };

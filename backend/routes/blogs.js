@@ -1,6 +1,7 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 const { auth, adminAuth } = require('../middleware/auth');
 
 const router = express.Router();
@@ -10,14 +11,43 @@ router.get('/', async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
+        const tag = req.query.tag?.trim();
+        const search = req.query.search?.trim();
+        const username = req.query.username?.trim().toLowerCase();
 
-        const blogs = await Blog.find({ published: true }, 'title content author tags published imageUrl createdAt updatedAt')
-            .populate('author', 'name ')
+        const query = { published: true };
+
+        if (tag) {
+            query.tags = { $regex: new RegExp(`^${tag}$`, 'i') };
+        }
+
+        if (search) {
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { content: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        if (username) {
+            const author = await User.findOne({ username }).select('_id');
+            if (!author) {
+                return res.json({
+                    blogs: [],
+                    totalPages: 0,
+                    currentPage: page,
+                    total: 0
+                });
+            }
+            query.author = author._id;
+        }
+
+        const blogs = await Blog.find(query, 'title content author tags published imageUrl createdAt updatedAt')
+            .populate('author', 'name username profilePicture bio socialHandles email role')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
 
-        const total = await Blog.countDocuments({ published: true });
+        const total = await Blog.countDocuments(query);
 
         res.json({
             blogs,
@@ -34,7 +64,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const blog = await Blog.findById(req.params.id, 'title content author tags published imageUrl createdAt updatedAt')
-            .populate('author', 'name'); // 
+            .populate('author', 'name username profilePicture bio socialHandles email role');
 
         if (!blog) {
             return res.status(404).json({ message: 'Blog not found' });
@@ -70,7 +100,7 @@ router.post('/', [
         });
 
         await blog.save();
-        await blog.populate('author', 'name email');
+        await blog.populate('author', 'name username profilePicture bio socialHandles email role');
 
         res.status(201).json({
             message: 'Blog created successfully',
@@ -111,7 +141,7 @@ router.put('/:id', [
         if (imageUrl !== undefined) blog.imageUrl = imageUrl; // update image url
 
         await blog.save();
-        await blog.populate('author', 'name email');
+        await blog.populate('author', 'name username profilePicture bio socialHandles email role');
 
         res.json({
             message: 'Blog updated successfully',
@@ -150,7 +180,7 @@ router.get('/user/me', auth, async (req, res) => {
         const skip = (page - 1) * limit;
 
         const blogs = await Blog.find({ author: req.user._id }, 'title content author tags published imageUrl createdAt updatedAt')
-            .populate('author', 'name email')
+            .populate('author', 'name username profilePicture bio socialHandles email role')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
@@ -176,7 +206,7 @@ router.get('/admin/all', adminAuth, async (req, res) => {
         const skip = (page - 1) * limit;
 
         const blogs = await Blog.find({}, 'title content author tags published imageUrl createdAt updatedAt')
-            .populate('author', 'name email')
+            .populate('author', 'name username profilePicture bio socialHandles email role')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { blogAPI, uploadAPI } from '../api';
 import { Type, Hash, Send, CheckCircle, Upload, X } from 'lucide-react';
 import EasyMDE from 'easymde';
@@ -21,7 +21,7 @@ const CreateBlog = ({ onBlogCreated }) => {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState('');
   const editorRef = useRef(null);
-  const [editor, setEditor] = useState(null);
+  const editorInstanceRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -56,25 +56,36 @@ const CreateBlog = ({ onBlogCreated }) => {
   };
 
   const initializeEditor = () => {
-    if (editorRef.current && !editor) {
-      const mdeInstance = new EasyMDE({
+    if (editorRef.current && !editorInstanceRef.current) {
+      editorInstanceRef.current = new EasyMDE({
         element: editorRef.current,
         spellChecker: false,
-        autoDownloadFontAwesome: false,
+        autoDownloadFontAwesome: true,
         placeholder: 'Write your markdown content here...',
+        minHeight: '420px',
         initialValue: formData.content,
-        toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 'image', '|', 'preview', 'side-by-side', 'fullscreen', '|', 'guide'],
+        toolbar: ['bold', 'italic', 'strikethrough', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', 'table', '|', 'link', 'image', '|', 'preview', 'side-by-side', 'fullscreen', '|', 'guide'],
       });
-      setEditor(mdeInstance);
     }
   };
+
+  useEffect(() => {
+    initializeEditor();
+
+    return () => {
+      if (editorInstanceRef.current) {
+        editorInstanceRef.current.toTextArea();
+        editorInstanceRef.current = null;
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setSuccess(false);
     try {
-      const content = editor ? editor.value() : formData.content;
+      const content = editorInstanceRef.current ? editorInstanceRef.current.value() : formData.content;
       const blogData = {
         ...formData,
         content,
@@ -82,7 +93,7 @@ const CreateBlog = ({ onBlogCreated }) => {
       };
       await blogAPI.createBlog(blogData);
       setFormData(INITIAL_STATE);
-      if (editor) editor.value('');
+      if (editorInstanceRef.current) editorInstanceRef.current.value('');
       setPreview('');
       setSuccess(true);
       if (onBlogCreated) onBlogCreated();
@@ -95,7 +106,7 @@ const CreateBlog = ({ onBlogCreated }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto my-10 p-8 bg-[#111118] rounded-2xl border border-white/[0.06]">
+    <div className="max-w-6xl mx-auto my-10 p-8 md:p-10 bg-[#111118] rounded-2xl border border-white/[0.06]">
       <header className="mb-8 border-b border-white/[0.06] pb-4">
         <h2 className="text-2xl font-bold text-white/90">Draft a New Story</h2>
         <p className="text-white/40 text-sm mt-1">Share your thoughts with the world.</p>
@@ -141,7 +152,7 @@ const CreateBlog = ({ onBlogCreated }) => {
               </button>
             </div>
           ) : (
-            <label className="flex flex-col items-center justify-center w-full h-48 border border-dashed border-white/[0.12] rounded-xl cursor-pointer bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+            <label className="flex flex-col items-center justify-center w-full h-56 border border-dashed border-white/[0.12] rounded-xl cursor-pointer bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
               <Upload className="w-8 h-8 text-white/20 mb-2" />
               <p className="text-sm text-white/40 font-medium">Click to upload image</p>
               <p className="text-xs text-white/20 mt-1">PNG, JPG, JPEG up to 5MB</p>
@@ -177,7 +188,7 @@ const CreateBlog = ({ onBlogCreated }) => {
             placeholder="A brief summary for the card view..."
             value={formData.excerpt}
             onChange={handleChange}
-            rows={2}
+            rows={3}
             className="w-full p-4 bg-white/[0.04] text-white border border-white/[0.08] rounded-xl focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 outline-none transition-all resize-none placeholder:text-white/20"
           />
           <p className="text-xs text-white/20 mt-1 text-right">{formData.excerpt.length} characters</p>
@@ -185,10 +196,10 @@ const CreateBlog = ({ onBlogCreated }) => {
 
         <div>
           <label className="text-sm font-medium text-white/60 block mb-2">Content (Markdown)</label>
-          <div onFocus={initializeEditor} className="rounded-xl border border-white/[0.08] overflow-hidden blog-editor-dark">
+          <div className="rounded-xl border border-white/[0.08] overflow-hidden blog-editor-dark">
             <textarea ref={editorRef} defaultValue={formData.content} />
           </div>
-          <p className="text-xs text-white/20 mt-2">Supports markdown: **bold**, *italic*, # headings, etc.</p>
+          <p className="text-xs text-white/20 mt-2">Supports GitHub-style markdown: tables, checklists, code fences, headings, links and images.</p>
         </div>
 
         <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
