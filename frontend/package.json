@@ -16,7 +16,7 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@sentry/react": "^10.36.0",
-    "axios": "^1.13.2",
+    "axios": "^1.13.5",
     "badge-maker": "^5.0.2",
     "dotenv": "^17.3.1",
     "easymde": "^2.20.0",
