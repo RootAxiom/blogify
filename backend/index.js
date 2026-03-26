@@ -81,6 +81,8 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/blogs', require('./routes/blogs'));
+app.use('/api/comments', require('./routes/comments'));
+app.use('/api/likes', require('./routes/likes'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/upload', require('./routes/upload'));

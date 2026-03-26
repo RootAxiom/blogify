@@ -3,8 +3,10 @@ const { body, validationResult } = require('express-validator');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 const { auth, adminAuth } = require('../middleware/auth');
-
 const router = express.Router();
+
+const PUBLIC_AUTHOR_FIELDS = 'name username profilePicture bio socialHandles role';
+const PRIVATE_AUTHOR_FIELDS = 'name username profilePicture bio socialHandles email role';
 
 router.get('/', async (req, res) => {
     try {
@@ -42,7 +44,7 @@ router.get('/', async (req, res) => {
         }
 
         const blogs = await Blog.find(query, 'title content author tags published imageUrl createdAt updatedAt')
-            .populate('author', 'name username profilePicture bio socialHandles email role')
+            .populate('author', PUBLIC_AUTHOR_FIELDS)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
@@ -64,7 +66,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const blog = await Blog.findById(req.params.id, 'title content author tags published imageUrl createdAt updatedAt')
-            .populate('author', 'name username profilePicture bio socialHandles email role');
+            .populate('author', PUBLIC_AUTHOR_FIELDS);
 
         if (!blog) {
             return res.status(404).json({ message: 'Blog not found' });
@@ -100,7 +102,7 @@ router.post('/', [
         });
 
         await blog.save();
-        await blog.populate('author', 'name username profilePicture bio socialHandles email role');
+        await blog.populate('author', PRIVATE_AUTHOR_FIELDS);
 
         res.status(201).json({
             message: 'Blog created successfully',
@@ -141,7 +143,7 @@ router.put('/:id', [
         if (imageUrl !== undefined) blog.imageUrl = imageUrl; // update image url
 
         await blog.save();
-        await blog.populate('author', 'name username profilePicture bio socialHandles email role');
+        await blog.populate('author', PRIVATE_AUTHOR_FIELDS);
 
         res.json({
             message: 'Blog updated successfully',
@@ -180,7 +182,7 @@ router.get('/user/me', auth, async (req, res) => {
         const skip = (page - 1) * limit;
 
         const blogs = await Blog.find({ author: req.user._id }, 'title content author tags published imageUrl createdAt updatedAt')
-            .populate('author', 'name username profilePicture bio socialHandles email role')
+            .populate('author', PRIVATE_AUTHOR_FIELDS)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
@@ -206,7 +208,7 @@ router.get('/admin/all', adminAuth, async (req, res) => {
         const skip = (page - 1) * limit;
 
         const blogs = await Blog.find({}, 'title content author tags published imageUrl createdAt updatedAt')
-            .populate('author', 'name username profilePicture bio socialHandles email role')
+            .populate('author', PRIVATE_AUTHOR_FIELDS)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);

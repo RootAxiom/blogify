@@ -89,6 +89,18 @@ export const blogAPI = {
   getAllBlogsAdmin: () => api.get('/blogs/admin/all'),
 };
 
+export const commentAPI = {
+  addComment: (blogId, payload) => api.post(`/comments/${blogId}/comment`, payload),
+  getBlogComments: (blogId) => publicApi.get(`/comments/${blogId}/comments`),
+  deleteComment: (commentId) => api.delete(`/comments/comment/${commentId}`),
+};
+
+export const likeAPI = {
+  toggleLike: (blogId) => api.post(`/likes/${blogId}/toggle`),
+  getLikeStatus: (blogId) => api.get(`/likes/${blogId}`),
+  getLikeUsers: (blogId) => publicApi.get(`/likes/${blogId}/users`),
+};
+
 export const adminAPI = {
   getUsers: (page = 1) => api.get(`/admin/users?page=${page}`),
   deleteUser: (id) => api.delete(`/admin/users/${id}`),
