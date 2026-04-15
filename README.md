@@ -2,6 +2,13 @@
 
 [![Node Security Scan](https://github.com/blackXploit-404/blogify/actions/workflows/node-security.yml/badge.svg)](https://github.com/blackXploit-404/blogify/actions/workflows/node-security.yml)
 
+![Status](https://img.shields.io/badge/status-completed-brightgreen)
+![Maintenance](https://img.shields.io/badge/maintenance-stopped-red)
+
+> [!NOTE]
+**Completed as part of a winter internship project and implemented all features according to plan and tech stack** 
+and now its no longer actively maintained.
+
 # Blogify Project
 
 A modern blogging platform built with MongoDB, Express, React, and Node.js. Currently in active development.
@@ -20,7 +27,7 @@ A modern blogging platform built with MongoDB, Express, React, and Node.js. Curr
 - User registration and login
 - Email verification with OTP (6-digit codes)
 - JWT token-based authentication
-- Password encryption
+- Password encryption 
 
 ### Blog Management
 - Create blogs with markdown editor
@@ -29,6 +36,10 @@ A modern blogging platform built with MongoDB, Express, React, and Node.js. Curr
 - View individual blog posts
 - Delete blogs (author/admin only)
 - Markdown content rendering
+- Add usernames insated of random id 
+- Add Likes & Comment System
+- Add Profile & Customization options(Bio , Profile Pic , Social Links etc.)
+- Add admin verfication badge 
 
 ### Admin Panel
 - User management
@@ -65,8 +76,4 @@ CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 FRONTEND_URL=http://localhost:5173
 ```
-
-## Development Status
-
-🚧 **In Development** 
 
